@@ -378,7 +378,9 @@ extension AppFeature {
         case .homebrew: return [.automationTerminal, .appManagement]
         case .appUpdates: return [.notifications, .appManagement]
         case .diskImageInstaller: return [.appManagement]
-        case .mixer: return [.audioCapture, .accessibility]
+        // Microphones and interfaces count only once the mixer matrix reads
+        // one; app routes and sources use the audio recording grant.
+        case .mixer: return [.audioCapture, .accessibility, .microphone]
         case .musicBlock: return [.accessibility]
         case .monitorCPU, .monitorMemory, .monitorDisk, .monitorPower: return [.notifications]
         case .clipboardHistory, .shelf, .urlCleaner,
@@ -543,6 +545,12 @@ extension AppFeature {
                 return boolFor(DefaultsKey.keepAwakeMouseJiggleEnabled)
             case (.mixer, .accessibility):
                 return boolFor(DefaultsKey.preciseVolumeRollerEnabled)
+            case (.mixer, .microphone):
+                let matrix = MixerMatrixConfiguration.decode(dataFor(DefaultsKey.mixerMatrixConfiguration))
+                return matrix.enabled && matrix.sources.contains {
+                    if case .input = $0.kind { return true }
+                    return false
+                }
             case (.brightness, .accessibility):
                 return boolFor(DefaultsKey.brightnessKeysEnabled)
                     || boolFor(DefaultsKey.brightnessOSDEnabled)

@@ -70,7 +70,7 @@ Reorder or hide panel sections, choose a compact layout, and export settings to 
 
 ### Sound
 
-- **Volume mixer.** Set volume per app, boost quiet audio past 100%, and pin or reorder favorites. No audio driver required.
+- **Volume mixer.** Set volume per app, boost quiet audio past 100%, and pin or reorder favorites. Route an app to several outputs at once, or mix apps and inputs into any output through a matrix of sends with mute, solo, EQ, a limiter and meters. No audio driver required.
 - **Per app output.** Play music through speakers while a call uses your headset.
 - **Output switcher.** Switch audio outputs with a shortcut and lower the volume when headphones disconnect.
 - **Microphone tools.** Choose a preferred input, adjust its level on supported devices, and mute all microphones with one shortcut.

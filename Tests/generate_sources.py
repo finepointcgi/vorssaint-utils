@@ -853,9 +853,12 @@ def main():
               "    private func applyingCurrentVolumes(",
               "    private func savedCallAppVolumeEnabled(", "    func setCallAppVolumeControl(",
               "    private func appNeedsEngine(", "    private func rowMayBeTapped(",
+              "    private func isClaimedByMatrix(",
               "    private func applyOutputRoute(", "    func setOutputDeviceUID(",
               "    func switchToNextSoundOutput(", "    func setUniversalOutputDeviceUID(",
               "    private func setDefaultOutputDeviceUID("])
+          # The fixture runs without the mixer matrix, which claims no app.
+          + "    var matrixClaimedApps: Set<String> { [] }\n"
           + "}\n")
     level_watch = declaration(mixer, "final class LevelCompensationWatch {").replace("private ", "")
     for operation in ("AddPropertyListener", "RemovePropertyListener"):
@@ -2384,6 +2387,10 @@ def main():
           + (ROOT / hud).read_text() + "\n"
           + f'#sourceLocation(file: {json.dumps(checks)}, line: 1)\n'
           + (ROOT / checks).read_text() + "\n#sourceLocation()\n")
+    # The mixer matrix graph runs on fake buffers; its atomics are the
+    # volume mixer's own.
+    write("MixerMatrixAtomics.swift", "import Darwin\nimport Foundation\n"
+          + declaration("Sources/Vorssaint/Services/Audio/AppVolumeMixer.swift", "final class AtomicFloatBox {"))
 
 
 if __name__ == "__main__":

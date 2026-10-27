@@ -754,6 +754,7 @@ enum DefaultsKey {
     static let windowGestureEnabled = "windowGestureEnabled"
     static let windowGestureModifiers = "windowGestureModifiers"
     static let windowGestureRaiseWindow = "windowGestureRaiseWindow"
+    static let mixerMatrixConfiguration = "mixerMatrixConfiguration" // JSON: app routes and the mixer matrix
     static let windowLayoutShortcutLeft = "windowLayoutShortcutLeft"
     static let windowLayoutShortcutRight = "windowLayoutShortcutRight"
     static let windowLayoutShortcutTop = "windowLayoutShortcutTop"

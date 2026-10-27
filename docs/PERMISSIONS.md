@@ -8,8 +8,8 @@ You can review or change every grant in System Settings, under Privacy and Secur
 |---|---|---|
 | Accessibility | Yes | Scroll direction, Window Layout, the app and window switcher, Dock Preview, Dock click to minimize, middle click, paste as plain text, Finder cut and paste, quit on close, radial menu key actions, optional notch notification mirroring and keyboard feedback |
 | Screen Recording | Yes | Window previews, screenshots, copy text from screen, magnified color picking and screen recordings |
-| System Audio Recording | Yes | Volume mixer, optional live equalizer and system audio capture for recordings |
-| Microphone | Yes | Your voice in a screen recording, only when you turn it on |
+| System Audio Recording | Yes | Volume mixer, app routing and mixer sources, optional live equalizer and system audio capture for recordings |
+| Microphone | Yes | Your voice in a screen recording, or a microphone or interface you add to the mixer, only when you turn it on |
 | Camera | Yes | The camera preview mirror, floating or inside the notch |
 | Calendars | Yes | Upcoming appointments in the notch |
 | Bluetooth | Yes | Accessory battery levels in Monitor, optional accessory alerts in the notch and Bluetooth on sleep |
@@ -60,19 +60,19 @@ The color picker also uses this permission for Vorssaint's magnifier and keyboar
 
 **Why it comes up.** macOS gates app audio taps behind the System Audio Recording permission.
 
-**What uses it.** The Volume Mixer, the optional live equalizer in Dynamic Island, and the screen recorder's system audio tap.
+**What uses it.** The Volume Mixer, app routing and app sources in the mixer matrix, the optional live equalizer in Dynamic Island, and the screen recorder's system audio tap.
 
 **If you say no.** Apps keep using normal system audio. The mixer cannot adjust or route individual apps, and the island uses animated music bars. The recorder can fall back to the screen capture stream's audio when available.
 
-**Optional.** Yes. The mixer and equalizer process audio in memory without saving or uploading it; apps you route to AirPlay are streamed from memory to the speaker you pick on your local network, through macOS's own AirPlay. The recorder saves audio only as part of a recording you start; sharing that recording is a separate action.
+**Optional.** Yes. The mixer, its routes and matrix, and the equalizer process audio in memory without saving or uploading it; apps you route to AirPlay are streamed from memory to the speaker you pick on your local network, through macOS's own AirPlay. The recorder saves audio only as part of a recording you start; sharing that recording is a separate action.
 
 ## Microphone
 
 **Why it comes up.** macOS asks before an app can record your microphone.
 
-**What uses it.** The screen recorder, only when you turn on microphone audio. Your voice is kept on a separate track so you can adjust or remove it in the editor.
+**What uses it.** The screen recorder, only when you turn on microphone audio. Your voice is kept on a separate track so you can adjust or remove it in the editor. The mixer matrix, only while it has a microphone or audio interface as a source; macOS asks the first time it opens one.
 
-**If you say no.** Screen recording still works without your microphone. System audio remains a separate choice.
+**If you say no.** Screen recording still works without your microphone. System audio remains a separate choice. In the mixer, input sources stay silent while app sources and routes keep working.
 
 **Optional.** Yes. Microphone audio stays in the recording on your Mac unless you explicitly create a temporary link for the finished video.
 

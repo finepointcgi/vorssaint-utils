@@ -1458,7 +1458,7 @@ final class AppVolumeMixer: ObservableObject {
     }
 
     private func rowMayBeTapped(_ app: MixerApp) -> Bool {
-        guard !app.isBypassed else { return false }
+        guard !app.isBypassed, !isClaimedByMatrix(app) else { return false }
         return MixerRoutingSupport.rowMayBeTapped(
             savedVolume: storedVolume(for: app.identity, saved: savedVolumes()),
             savedRouteUID: storedRoute(for: app.identity, saved: savedOutputDeviceUIDs()),
@@ -1467,7 +1467,7 @@ final class AppVolumeMixer: ObservableObject {
     }
 
     private func appNeedsEngine(_ app: MixerApp) -> Bool {
-        guard !app.isBypassed else { return false }
+        guard !app.isBypassed, !isClaimedByMatrix(app) else { return false }
         // A universal route and its effective output come from one snapshot.
         // The picker may already show the next successful choice, but that
         // must not dismantle this route before its replacement is ready.
@@ -1492,6 +1492,25 @@ final class AppVolumeMixer: ObservableObject {
         app.outputDeviceUnavailable = MixerRoutingSupport.selectedDeviceUnavailable(
             selectedUID: selectedUID,
             availableUIDs: availableUIDs)
+    }
+
+    // MARK: - Mixer matrix
+
+    /// Apps whose own output the mixer matrix mutes while it plays them
+    /// through its sends. Tapping them here as well would play a second,
+    /// scaled copy on their output, so their volume becomes a gain inside
+    /// the matrix instead.
+    private(set) var matrixClaimedApps: Set<String> = []
+
+    func setMatrixClaimedApps(_ claimed: Set<String>) {
+        guard claimed != matrixClaimedApps else { return }
+        matrixClaimedApps = claimed
+        reconcileEngines(with: apps)
+    }
+
+    private func isClaimedByMatrix(_ app: MixerApp) -> Bool {
+        guard !matrixClaimedApps.isEmpty, let id = app.persistenceID else { return false }
+        return matrixClaimedApps.contains(id)
     }
 
     // MARK: - Process discovery
