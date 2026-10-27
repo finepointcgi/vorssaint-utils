@@ -114,6 +114,12 @@ enum WindowZonesTests {
                         == WindowZoneAssignment(displayKey: "left", zones: [0]),
                      "without crossing displays the move wraps around")
 
+        suite.expect(WindowZoneGeometry.window(left.zones[1].offsetBy(dx: 6, dy: -4), fills: [1], of: left.zones)
+                        && !WindowZoneGeometry.window(WindowZoneRect(left: 520, top: 300, right: 1020, bottom: 700),
+                                                      fills: [1], of: left.zones)
+                        && !WindowZoneGeometry.window(left.zones[1], fills: [7], of: left.zones),
+                     "a window keeps its zones only while it still sits in them")
+
         var state: WindowZoneNavigation.Extension?
         let grown = WindowZoneNavigation.extend(window: left.zones[0], windowID: 7, area: left, assigned: [0],
                                                 state: &state, direction: .right)

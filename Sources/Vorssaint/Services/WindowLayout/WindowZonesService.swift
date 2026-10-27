@@ -437,7 +437,10 @@ final class WindowZonesService: ObservableObject {
         // Dragged out of its zone: back to the size it had before.
         guard let previous = zoned.removeValue(forKey: windowID),
               UserDefaults.standard.bool(forKey: DefaultsKey.windowZonesRestoreSize),
-              previous.unzonedSize != target.frame.size else { return }
+              previous.unzonedSize != target.frame.size,
+              let display = displays().first(where: { $0.key == previous.assignment.displayKey }),
+              WindowZoneGeometry.window(WindowZoneRect(finished.candidate.frame), fills: previous.assignment.zones,
+                                        of: zones(for: display)) else { return }
         WindowLayoutService.shared.placeInZone(target, rect: CGRect(origin: target.frame.origin,
                                                                    size: previous.unzonedSize))
     }
@@ -648,7 +651,16 @@ final class WindowZonesService: ObservableObject {
         else { return }
         let all = displays()
         let rect = WindowZoneRect(CGRect(origin: target.frame.origin, size: target.frame.size))
-        let assignment = zoned[target.key.windowID]?.assignment
+        // A window moved or resized since (by hand, a layout shortcut or
+        // another tool) no longer sits in its zones, so it starts afresh.
+        var assignment = zoned[target.key.windowID]?.assignment
+        if let current = assignment,
+           !WindowZoneGeometry.window(rect, fills: current.zones,
+                                      of: all.first { $0.key == current.displayKey }.map(zones(for:)) ?? []) {
+            assignment = nil
+            zoned[target.key.windowID] = nil
+            extensionState = nil
+        }
         let currentKey = assignment?.displayKey ?? display(for: rect, in: all)?.key
         guard let currentIndex = all.firstIndex(where: { $0.key == currentKey }) else { return }
         let areas = all.map { WindowZoneArea(displayKey: $0.key, workArea: $0.workArea, zones: zones(for: $0)) }

@@ -443,6 +443,15 @@ enum WindowZoneGeometry {
             .reduce(nil) { result, rect in result.map { $0.union(rect) } ?? rect }
     }
 
+    /// Whether a window still covers the zones it was put in. Apps with a
+    /// minimum size or size steps land a little off, hence the tolerance.
+    static func window(_ window: WindowZoneRect, fills ids: [Int], of zones: [WindowZoneRect],
+                       tolerance: Int = 40) -> Bool {
+        guard let bounds = bounds(of: ids, in: zones) else { return false }
+        return abs(window.left - bounds.left) <= tolerance && abs(window.top - bounds.top) <= tolerance
+            && abs(window.right - bounds.right) <= tolerance && abs(window.bottom - bounds.bottom) <= tolerance
+    }
+
     // MARK: - Keyboard navigation
 
     /// The zone whose centre lies best in `direction` from the window's
