@@ -58,6 +58,7 @@ enum SettingsBackupSupport {
         DefaultsKey.appVolumes,
         DefaultsKey.appVolumesArePositions,
         DefaultsKey.appOutputDevices,
+        DefaultsKey.windowZonesConfiguration,
         DefaultsKey.mixerCallAppVolumeEnabled,
         DefaultsKey.mixerHiddenApps,
         DefaultsKey.preferredInputDevice,
@@ -102,6 +103,8 @@ enum SettingsBackupSupport {
     /// when they would otherwise slip in through the registered set.
     static let machineStateKeys: Set<String> = [
         DefaultsKey.displaysSwitchedOff,
+        // Each app's last zone names this Mac's displays.
+        DefaultsKey.windowZonesHistory,
         DefaultsKey.displaysSwitchedOffFingerprints,
         // Codex homes are folders on this Mac whose sign-in the cards use,
         // never settings to bring to another one.
